@@ -3,28 +3,19 @@ import { signalRPOSDataReceived, singalDataRefReceived, connectionStatusChanged,
 
 import datarefs from "../atoms/XPlaneDataRefs";
 
-const MESSAGES_PER_SECOND_IMPORTANT_FLIGHT_DATA = 15;
-
-const xplaneMessages = {
-    GET_XPLANE_RPOS_OUTPUT: "RPOS0" + MESSAGES_PER_SECOND_IMPORTANT_FLIGHT_DATA,
-    STOP_XPLANE_OUTPUT: "RPOS000",
-};
-
 //import WS from 'react-native-websocket';
-
-var socketBound = false;
-
 
 export default class XPlaneConnector extends React.Component {
    
     constructor(props) {
         super(props);
-        console.log("Creating X-Plane WS connector");
+        console.log("Creating FS WS connector");
 
+        
         this.store = props.store;
         this.remoteAddress = props.remoteAddress;
 
-        var socket = new WebSocket('ws://localhost:9002');
+        var socket = new WebSocket(this.remoteAddress);
         socket.onopen = () => {console.log("connection established");
             this.store.dispatch(connectionStatusChanged(connectionStatus.CONNECTED));
         };

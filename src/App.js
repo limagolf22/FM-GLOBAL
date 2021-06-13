@@ -29,7 +29,7 @@ export default function App() {
 
   return (
     <Provider store={store}>
-      <XPlaneConnector remoteAddress="192.168.1.26" store={store} />
+      <XPlaneConnector remoteAddress="ws://10.0.2.2:9002" store={store} /> {/*change to localhost for web tests*/}
       <NavigationContainer>
         <Stack.Navigator
             initialRouteName="ProviderSelectionContainer"

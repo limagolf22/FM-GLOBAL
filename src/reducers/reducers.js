@@ -73,8 +73,8 @@ function maneuver(state = {
 }
 
 function dataProvider(state = {
-    dataProvider: dataProviders.XPLANE, connectionStatus: connectionStatus.NOT_CONNECTED,
-    configurations: { provider: dataProviders.XPLANE, automated_search: false, iP_address: "192.168.1.26", port: 49000 },
+    dataProvider: dataProviders.FS, connectionStatus: connectionStatus.NOT_CONNECTED,
+    configurations: { provider: dataProviders.FS, automated_search: false, iP_address: "localhost", port: 9002 },
 },
     action) {
 

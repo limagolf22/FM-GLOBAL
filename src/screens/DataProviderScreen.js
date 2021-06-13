@@ -49,7 +49,7 @@ function DataProviderScreen({ navigation, currentDataProvider }) {
                     {
                         simulatedItems
                     }
-                    <ProviderItem itemName="GNSS (not yet supported)" simulated={false} currentItem={currentDataProvider === "GPS"} disableTouch={true} />
+                    <ProviderItem itemName="GNSS (not yet supported)" simulated={false} currentItem={currentDataProvider === "GNSS"} disableTouch={true} />
                 </View>
             </View>
         </View>

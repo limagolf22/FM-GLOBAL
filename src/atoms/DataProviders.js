@@ -3,6 +3,7 @@
  */
 
 const dataProviders = {
+    FS: 'Flight Simulator',
     XPLANE: 'X-Plane',
     GPS: 'GPS',
 };
