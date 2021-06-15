@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Button, Pressable } from 'react-native';
 import PropTypes from "prop-types";
 import maneuvers from "../atoms/ManeuverTypes";
 import ScreenBrief from "../components/ScreenBrief";
@@ -17,15 +17,14 @@ import RequirementsContainer from "../container/RequirementsContainer";
 import ConnectionContainer from '../container/ConnectionContainer';
 import { getManeuverRequierements } from "../selectors/RequirementsCalculator";
 import { getManeuverStatus } from "../selectors/ManeuverStatusObserver";
-import { startManeuver, stopManeuver, restartCurrentManeuver } from "../actions/actions";
+import { startManeuver, stopManeuver, restartCurrentManeuver,sendTPRequest } from "../actions/actions";
 import ManeuverEndStatusContainer from "../container/ManeuverEndStatusContainer";
 import ManeuverEngagementMessage from "../components/ManeuverEngagementMessage";
 import SteepTurnPerformanceContainer from '../container/maneuvers/SteepTurnPerformanceContainer';
 
 import steepTurnCriteria from "../atoms/criteria/SteepTurnCriteria";
 
-
-function ManeuverScreen({ maneuverType, allRequirementsFulfilled, userFulfilledEngagementCriteria, startCurrentManeuver, stopCurrentManeuver, maneuverRecording, maneuverEnded, maneuverStopCriteriaReached, maneuverSuccess }) {
+function ManeuverScreen({ maneuverType, allRequirementsFulfilled, userFulfilledEngagementCriteria, startCurrentManeuver, stopCurrentManeuver, maneuverRecording, maneuverEnded, maneuverStopCriteriaReached, maneuverSuccess,sendATPRequest }) {
 
   const maneuverDescription = getManeuverDescription(maneuverType);
 
@@ -55,6 +54,16 @@ function ManeuverScreen({ maneuverType, allRequirementsFulfilled, userFulfilledE
               briefDescription={maneuverDescription}
               callToAction="Fullfill those requirements to start training."
             />
+            <Pressable onPress={() =>sendATPRequest("3;48.1399;11.5809;4500;95") }
+              style={styles.button}
+            >
+              <Text style={styles.buttonText}>
+                teleport to a proper place for the test
+              </Text>
+
+            </Pressable>
+            
+
             <RequirementsContainer />
           </View>
         ) : (
@@ -99,6 +108,22 @@ const styles = StyleSheet.create({
   overviewContainer: {
     paddingTop: 20,
   },
+  button: {
+    alignItems:'right',
+    justifyContent:'right',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderRadius:4,
+    elevation:7,
+    backgroundColor: '#1e90ff',
+    width:315
+  },
+  buttonText: {
+    fontSize: 16,
+    lineHeight: 21,
+    letterSpacing: 0.25,
+    fontWeight:'bold'
+  }
 });
 
 ManeuverScreen.propTypes = {
@@ -114,18 +139,19 @@ ManeuverScreen.propTypes = {
 
 const mapStateToProps = state => ({
   maneuverType: state.maneuver.maneuverSelected,
-  allRequirementsFulfilled: true, //getManeuverRequierements(state).allRequirementsFulfilled,
-  userFulfilledEngagementCriteria: false,// getManeuverStatus(state).userFulfilledEngagementCriteria,
+  allRequirementsFulfilled:getManeuverRequierements(state).allRequirementsFulfilled,
+  userFulfilledEngagementCriteria: getManeuverStatus(state).userFulfilledEngagementCriteria,
   maneuverRecording: state.maneuver.maneuverRecording,
   maneuverEnded: state.maneuver.maneuverEnded,
-  maneuverStopCriteriaReached: false,// getManeuverStatus(state).maneuverStopCriteriaReached,
-  maneuverSuccess: false, //getManeuverStatus(state).maneuverPerformance.maneuverSuccess,
+  maneuverStopCriteriaReached: getManeuverStatus(state).maneuverStopCriteriaReached,
+  maneuverSuccess:getManeuverStatus(state).maneuverPerformance.maneuverSuccess,
 });
 
 const mapDispatchToProps = dispatch => ({
   startCurrentManeuver: () => dispatch(startManeuver()),
   stopCurrentManeuver: success => dispatch(stopManeuver(success)),
   restartManeuver: () => dispatch(restartCurrentManeuver()),
+  sendATPRequest: (pl) => dispatch(sendTPRequest(pl))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManeuverScreen)

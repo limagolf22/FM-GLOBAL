@@ -59,7 +59,7 @@ export const connectionStatus = {
 /////////////////////////
 export const COMPLETED_MANEUVER_PERFORMANCE = 'COMPLETED_MANEUVER_PERFORMANCE';
 
-
+export const REQUEST_TP = 'REQUEST_TP';
 
 export function signalManeuverRequirementsMet() {
     return { type: STOP_MANEUVER };
@@ -108,5 +108,8 @@ export function signalRPOSDataReceived(heading, elevASL, elevAGL, roll) {
     return { type: SIGNAL_RPOS_DATA_RECEIVED, heading, elevASL, elevAGL, roll };
 }
 
+export function sendTPRequest(pl) {
+    return { type: REQUEST_TP, payload:pl };
+}
 
 

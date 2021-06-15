@@ -26,10 +26,11 @@ export default function App() {
   console.log('Create Redux store');
   const store = createStore(maneuversAppReducer, applyMiddleware(thunk));
   console.log(store.getState());
-
+  const WSock =       <XPlaneConnector remoteAddress="ws://localhost:9002" store={store} /> ;
+  /*change to localhost for web tests / 10.0.2.2 for android tests*/
   return (
     <Provider store={store}>
-      <XPlaneConnector remoteAddress="ws://10.0.2.2:9002" store={store} /> {/*change to localhost for web tests*/}
+      <XPlaneConnector remoteAddress="ws://localhost:9002" store={store}/> 
       <NavigationContainer>
         <Stack.Navigator
             initialRouteName="ProviderSelectionContainer"
@@ -42,6 +43,7 @@ export default function App() {
 
         </Stack.Navigator>
       </NavigationContainer>
+
     </Provider>
     
   );

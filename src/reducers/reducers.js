@@ -13,7 +13,8 @@ import {
     MANEUVER_REQUIREMENTS_NOT_MET,
     MANEUVER_REQUIREMENTS_MET,
     START_MANEUVER,
-    STOP_MANEUVER
+    STOP_MANEUVER,
+    REQUEST_TP
 } from '../actions/actions';
 import maneuvers from '../atoms/ManeuverTypes';
 import dataProviders from '../atoms/DataProviders';
@@ -100,6 +101,23 @@ function dataProvider(state = {
     }
 }
 
+function dataSender(
+    state = { flag: -1, payload: ""},
+    action,
+) {
+    var provi = (state.flag+1)%10;
+    switch (action.type) {
+        case REQUEST_TP:
+
+            return {
+                flag:provi,
+                payload: action.payload
+            }
+
+        default:
+            return state;
+    }
+}
 
 function flightData(
     state = { heading: 0, elevASL: 0, elevAGL: 0, roll: 0, engineRPM: 0, indicatedAirspeed: 0 },
@@ -184,6 +202,7 @@ const maneuversAppReducer = combineReducers({
     flightData,
     userPerformances,
     dataProvider,
+    dataSender
 });
 
 export default maneuversAppReducer;
