@@ -62,7 +62,7 @@ function ManeuverScreen({ maneuverType, allRequirementsFulfilled, userFulfilledE
               </Text>
 
             </Pressable>
-            
+
 
             <RequirementsContainer />
           </View>
@@ -109,8 +109,8 @@ const styles = StyleSheet.create({
     paddingTop: 20,
   },
   button: {
-    alignItems:'right',
-    justifyContent:'right',
+    alignItems:'flex-start',
+    justifyContent:'flex-start',
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderRadius:4,

@@ -2,8 +2,11 @@
  * The complete list of supported flight simulators.
  */
 
+import dataProviders from "./DataProviders";
+
 const supportedSimulators = {
-    XPLANE: 'X-Plane',
+    FS2020: dataProviders.FS,
+    XPLANE: dataProviders.XPLANE
 };
 
 export default supportedSimulators;

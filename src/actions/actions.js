@@ -71,7 +71,7 @@ export function signalManeuverRequirementsMet() {
  */
 
 export function setDataProvider(dataProvider) {
-    return { type: SET_DATA_PROVIDER, dataProvider };
+    return { type: SET_DATA_PROVIDER, dataProvider:dataProvider };
 }
 
 export function connectionStatusChanged(connectionStatus) {

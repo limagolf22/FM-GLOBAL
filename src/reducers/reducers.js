@@ -88,6 +88,7 @@ function dataProvider(state = {
                 return Object.assign({}, dataProvider, {
                     dataProvider: action.dataProvider,
                     connectionStatus: connectionStatus.NOT_CONNECTED,
+                    configurations: state.dataProvider.configurations
                 });
             }
         case CONNECTION_STATUS_CHANGED:
