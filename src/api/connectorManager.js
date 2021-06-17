@@ -12,20 +12,25 @@
  import {connect} from "react-redux";
  import XPlaneConnectorWs from "./xplaneConnector-ws";
 
-function ConnectorManager({ dataProvider, store }) {
+function ConnectorManager({ flag_co, dataProvider, store, remoteaddr }) {
+    if (flag_co<0) {
+        return null;
+    }
     switch (dataProvider) {
         case dataProviders.FS :
-            return (<FSConnector remoteAddress="ws://localhost:9002" store={store}/> )
+            return (<FSConnector remoteAddress={remoteaddr} store={store}/> )
         case dataProviders.XPLANE :
-            return (<XPlaneConnectorWs remoteAddress="ws://192.168.1.26:9001" store={store} /> )
+            return (<XPlaneConnectorWs remoteAddress={remoteaddr} store={store} /> )
         default :
             console.log("a non existent data provider has been chosen");
-            return;
+            return null;
     }
  }
 
  const mapStateToProps = state => ({
-    dataProvider: state.dataProvider.dataProvider
+    dataProvider: state.dataProvider.dataProvider,
+    remoteaddr: "ws://"+state.connectionData.IP_adress+":"+state.connectionData.port_num,
+    flag_co: state.connectionData.flag_co
   });
   
 export default connect(mapStateToProps)(ConnectorManager)

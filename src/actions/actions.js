@@ -3,6 +3,11 @@
  */
 
 /**
+ * The user set his username and the adress of his computer
+ */
+export const SET_USER_DATA = 'SET_USER_DATA';
+
+/**
  * The user selected a maneuver for training in the briefing room
  */
 export const SET_SELECTED_MANEUVER = 'SET_SELECTED_MANEUVER';
@@ -69,6 +74,10 @@ export function signalManeuverRequirementsMet() {
 /*
  * Action creators
  */
+
+export function setUserData(username, IP, numport) {
+    return {type: SET_USER_DATA, username:username, IP_adress:IP, port_num:numport};
+}
 
 export function setDataProvider(dataProvider) {
     return { type: SET_DATA_PROVIDER, dataProvider:dataProvider };

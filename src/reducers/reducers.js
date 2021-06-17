@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux';
 import {
+    SET_USER_DATA,
     SET_SELECTED_MANEUVER,
     RESET_CURRENT_MANEUVER,
     SIGNAL_RPOS_DATA_RECEIVED,
@@ -19,6 +20,26 @@ import {
 import maneuvers from '../atoms/ManeuverTypes';
 import dataProviders from '../atoms/DataProviders';
 import dataRefs from "../atoms/XPlaneDataRefs";
+import { DefaultTheme } from '@react-navigation/native';
+
+function connectionData(state={
+    flag_co:-1,
+    username:"",
+    IP_adress:"",
+    port_num:""
+}, action) {
+    switch (action.type) {
+        case SET_USER_DATA:
+            return {
+                flag_co:(state.flag_co+1)%10,
+                username:action.username,
+                IP_adress:action.IP_adress,
+                port_num:action.port_num
+            };
+        default:
+            return state;
+    }
+}
 
 function maneuver(state = {
     maneuverSelected: maneuverSelectionStatus.NONE_SELECTED,
@@ -199,6 +220,7 @@ function userPerformances(state, action) {
 }
 
 const maneuversAppReducer = combineReducers({
+    connectionData,
     maneuver,
     flightData,
     userPerformances,
