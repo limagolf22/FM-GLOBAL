@@ -24,14 +24,63 @@ import dataRefs from "../atoms/XPlaneDataRefs";
 import { DefaultTheme } from '@react-navigation/native';
 import { connect } from 'react-redux';
 
+function createUserPerfList(){
+
+    var newState = [];
+
+        for (let [key, value] of Object.entries(maneuvers)) {
+
+            newState = [
+                ...newState,
+                {
+                    maneuver: value,
+                    accuracy: 0,
+                    frequency: 0,
+                    overallTrainingStatus: 0,
+                }
+            ]
+        }
+    console.log("new user perf list created");
+    return newState;
+}
+
 function connectionData(state={
     username:"",
+    username_list:{"default":1}
 }, action) {
     switch (action.type) {
         case SET_USER_DATA:
+            const pr = action.username;
+            if (state.username_list[pr] === undefined){
+                const provi = {...state.username_list};
+                const pr = action.username;
+                provi[pr] = createUserPerfList();
+                return {
+                    username:action.username,
+                    username_list:provi
+                };
+            }
             return {
+                ...state,
                 username:action.username
-            };
+            }
+        case COMPLETED_MANEUVER_PERFORMANCE:
+            const provi2 = {...state.username_list};
+            const pr2 = action.username;
+            provi2[pr] = state.username_list[pr].map((maneuverPerformance, index) => {
+                if (maneuverPerformance.maneuver === action.maneuver) {
+                    return Object.assign({}, maneuverPerformance, {
+                        frequency: maneuverPerformance.frequency + 1,
+                    })
+                }
+                return maneuverPerformance
+            });
+            return {
+                ...state,
+                username_list:provi2
+                
+            }
+
         default:
             return state;
     }
@@ -93,7 +142,7 @@ function maneuver(state = {
 function dataProvider(state = {
     dataProvider: dataProviders.FS,
     connectionStatus: connectionStatus.NOT_CONNECTED,
-    configurations: { provider: dataProviders.FS, automated_search: false, iP_address: "localhost", port: "9002" },
+    configurations: { provider: dataProviders.FS, automated_search: false, iP_address: "10.0.2.2", port: "9002" },
 },
     action) {
     switch (action.type) {

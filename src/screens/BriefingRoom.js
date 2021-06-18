@@ -22,7 +22,7 @@ import { connect } from 'react-redux';
 import ConnectionContainer from '../container/ConnectionContainer';
 import {useKeepAwake} from 'expo-keep-awake';
 
-function BriefingRoom({ navigation, navigateToManeuver }) {
+function BriefingRoom({ usname, navigation, navigateToManeuver }) {
   useKeepAwake();
   return (
     <View style={styles.rootContainer}>
@@ -30,8 +30,7 @@ function BriefingRoom({ navigation, navigateToManeuver }) {
       <ConnectionContainer />
       <ScreenBrief
         briefTitle="BriefingRoom"
-        briefDescription="It is important that you regularly train common flight maneuvers. 
-        Exercise and master them and you will be ready when you need to be."
+        briefDescription={"Hi "+usname+" ! It is important that you regularly train common flight maneuvers. Exercise and master them and you will be ready when you need to be."}
         callToAction="Select a maneuver to start training."
       />
       <View style={styles.maneuverListContainer}>
@@ -71,6 +70,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = state => ({
+  usname: state.connectionData.username
 });
 
 const mapDispatchToProps = dispatch => ({

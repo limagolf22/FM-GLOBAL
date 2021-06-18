@@ -23,8 +23,6 @@ class ConnectorManager extends React.Component {
     render() {
         this.ws.close();
         this.ws = new WebSocket(this.props.remoteaddr);
-        console.log("new ws created");
-        console.log(this.ws);
         switch (this.props.dataProvider) {
             case dataProviders.FS :
               //  console.log(this.ws);

@@ -16,6 +16,9 @@ import DataProviderScreen from './screens/DataProviderScreen';
 
 import ConnectorManager from './api/connectorManager';
 
+import {store, persistor} from './store/store'
+import { PersistGate } from 'redux-persist/integration/react';
+
 
 const Stack = createStackNavigator();
 
@@ -23,8 +26,8 @@ const Stack = createStackNavigator();
 export default function App() {
   console.log("App started");
 
-  console.log('Create Redux store');
-  const store = createStore(maneuversAppReducer, applyMiddleware(thunk));
+  
+  //const store = createStore(maneuversAppReducer, applyMiddleware(thunk));
   var remAddress= ""
   switch (Platform.OS){
     case "web":
@@ -33,12 +36,11 @@ export default function App() {
     default:
       remAddress = "ws://10.0.2.2:9002";
   }
-  console.log(Platform.OS);
-  console.log(store.getState());
   store.subscribe(()=>console.log(store.getState()));
   /*change to localhost for web tests / 10.0.2.2 for android tests*/
   return (
     <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
       <ConnectorManager store={store} remoteaddress={remAddress}/> 
       <NavigationContainer>
         <Stack.Navigator
@@ -53,7 +55,7 @@ export default function App() {
 
         </Stack.Navigator>
       </NavigationContainer>
-
+      </PersistGate>
     </Provider>
     
   );
