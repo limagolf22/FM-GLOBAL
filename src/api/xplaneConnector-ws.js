@@ -42,17 +42,23 @@
          console.log("Creating X-Plane connector");
  
          this.store = props.store;
-         this.remoteAddress = props.remoteAddress;
-         this.socket = new WebSocket(this.remoteAddress);
-         this.socket.onopen = ()=>{
-             this.requestXPlaneOutput(props.remoteAddress);
-             this.store.dispatch(connectionStatusChanged(connectionStatus.CONNECTED));
-         }
-         this.listenToXPLANEOutput();
+         this.socket = props.ws;
+         
       }
  
  
      render() {
+        this.socket =this.props.ws;
+        this.socket.onopen = ()=>{
+            console.log("connection with X-Plane established");
+            this.requestXPlaneOutput("");
+            this.store.dispatch(connectionStatusChanged(connectionStatus.CONNECTED));
+        }
+        this.socket.onclose = ()=>{
+           console.log("connection with X-Plane lost");
+           this.store.dispatch(connectionStatusChanged(connectionStatus.NOT_CONNECTED));
+       }
+        this.listenToXPLANEOutput();
          return null;
      }
  
@@ -83,7 +89,7 @@
                  this.store.dispatch(connectionStatusChanged(connectionStatus.NOT_CONNECTED));
              }
  
-             this.requestXPlaneOutput(this.remoteAddress);
+             this.requestXPlaneOutput("");
  
          } else {
              if (!currentlyConnected) {

@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { signalRPOSDataReceived, singalDataRefReceived, connectionStatusChanged, connectionStatus } from "../actions/actions";
+import dataProviders from '../atoms/DataProviders';
 
 import datarefs from "../atoms/XPlaneDataRefs";
 
@@ -10,25 +11,32 @@ class FSConnector extends React.Component {
         super(props);
         console.log("Creating FS WS connector");
         this.store = props.store;
-        this.remoteAddress = props.remoteAddress;
-        this.socket = new WebSocket(this.remoteAddress);
-        this.socket.onopen = () => {console.log("connection established");
-            this.store.dispatch(connectionStatusChanged(connectionStatus.CONNECTED));
-        };
-        this.socket.onmessage = ({data}) => {
-            this.analyzeFSResponse(data);
-        }
-        this.socket.onclose = () => {console.log("connection lost");
-            this.store.dispatch(connectionStatusChanged(connectionStatus.NOT_CONNECTED));
-        }
-        
-        }
+        this.flag = props.flag;
+        this.socket = props.ws;
+    }
 
     render() {
-        if(this.props.payload.length>0){
-            console.log("FS connector sent : "+this.props.payload +this.props.flag)
-            this.sendMessage(this.props.payload);
+        if(this.flag != this.props.flag){
+            this.flag = this.props.flag;
+            if(this.props.payload.length>0 ){
+                console.log("FS connector sent : "+this.props.payload +this.props.flag);
+                this.sendMessage(this.props.payload);
+            }
+            return null;
         }
+        if (this.props.dataProvider == dataProviders.FS) {
+            this.socket = this.props.ws;
+            this.socket.onopen = () => {console.log("connection with FS established");
+                this.store.dispatch(connectionStatusChanged(connectionStatus.CONNECTED));
+            };
+            this.socket.onmessage = ({data}) => {
+                this.analyzeFSResponse(data);
+            }
+            this.socket.onclose = () => {console.log("connection with FS lost");
+                this.store.dispatch(connectionStatusChanged(connectionStatus.NOT_CONNECTED));
+            }
+        }
+
         return null;
     }
 
@@ -54,7 +62,7 @@ class FSConnector extends React.Component {
                 this.store.dispatch(singalDataRefReceived(datarefs.ENGINE_RPM, rpm));
                 break;
             default:
-                console.log("default");
+              //  console.log("default");
         }
         
     }

@@ -2,10 +2,18 @@
  * Action types
  */
 
+import dataProviders from "../atoms/DataProviders";
+
 /**
- * The user set his username and the adress of his computer
+ * The user set his username
  */
 export const SET_USER_DATA = 'SET_USER_DATA';
+
+/**
+ * The user set the adress of the simulation's server
+ */
+
+export const SET_DATA_CONNECTION = 'SET_DATA_CONNECTION';
 
 /**
  * The user selected a maneuver for training in the briefing room
@@ -75,16 +83,20 @@ export function signalManeuverRequirementsMet() {
  * Action creators
  */
 
-export function setUserData(username, IP, numport) {
-    return {type: SET_USER_DATA, username:username, IP_adress:IP, port_num:numport};
+export function setUserData(username) {
+    return {type: SET_USER_DATA, username:username};
 }
 
 export function setDataProvider(dataProvider) {
     return { type: SET_DATA_PROVIDER, dataProvider:dataProvider };
 }
 
+export function setDataConnection(IP,numport) {
+    return { type: SET_DATA_CONNECTION, iP_address:IP, port:numport};
+}
+
 export function connectionStatusChanged(connectionStatus) {
-    return { type: CONNECTION_STATUS_CHANGED, connectionStatus };
+    return { type: CONNECTION_STATUS_CHANGED, connectionStatus:connectionStatus };
 }
 
 export function setSelectedManeuever(maneuver) {

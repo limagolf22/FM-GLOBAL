@@ -12,25 +12,35 @@
  import {connect} from "react-redux";
  import XPlaneConnectorWs from "./xplaneConnector-ws";
 
-function ConnectorManager({ flag_co, dataProvider, store, remoteaddr }) {
-    if (flag_co<0) {
-        return null;
+class ConnectorManager extends React.Component {
+    constructor(props){
+        super(props);
+        this.dataProvider=props.dataProvider;
+        this.store = props.store;
+        this.remoteaddr = props.remoteaddr;
+        this.ws = new WebSocket(props.remoteaddr);
     }
-    switch (dataProvider) {
-        case dataProviders.FS :
-            return (<FSConnector remoteAddress={remoteaddr} store={store}/> )
-        case dataProviders.XPLANE :
-            return (<XPlaneConnectorWs remoteAddress={remoteaddr} store={store} /> )
-        default :
-            console.log("a non existent data provider has been chosen");
-            return null;
+    render() {
+        this.ws.close();
+        this.ws = new WebSocket(this.props.remoteaddr);
+        console.log("new ws created");
+        console.log(this.ws);
+        switch (this.props.dataProvider) {
+            case dataProviders.FS :
+              //  console.log(this.ws);
+                return (<FSConnector dataProvider={this.props.dataProvider} ws={this.ws} store={this.store}/> )
+            case dataProviders.XPLANE :
+                return (<XPlaneConnectorWs ws={this.ws} store={this.store} /> )
+            default :
+                console.log("a non existent data provider has been chosen");
+                return null;
+        }
     }
  }
 
  const mapStateToProps = state => ({
     dataProvider: state.dataProvider.dataProvider,
-    remoteaddr: "ws://"+state.connectionData.IP_adress+":"+state.connectionData.port_num,
-    flag_co: state.connectionData.flag_co
+    remoteaddr: "ws://"+state.dataProvider.configurations.iP_address+":"+state.dataProvider.configurations.port
   });
   
 export default connect(mapStateToProps)(ConnectorManager)

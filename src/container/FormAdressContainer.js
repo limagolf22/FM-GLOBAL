@@ -9,35 +9,28 @@ import {
 import ScreenBrief from '../components/ScreenBrief';
 
 import {connect} from 'react-redux';
-import { setUserData } from '../actions/actions';
+import { setDataConnection } from '../actions/actions';
 
-class ConnectionScreen extends React.Component {
+class FormAdressContainer extends React.Component {
 
   constructor(props){
     super(props);
     this.navigation = props.navigation;
     this.sendForm = props.sendForm;
-    this.username = "";
+    this.IP_address = "localhost";
+    this.num_port = "9002";
   }
     
   render() {
     return(
     <View style={styles.rootContainer}>
-      <ScreenBrief
-        briefTitle="Connection"
-        briefDescription="Welcome to the FlightManeuvers App !"
-        callToAction="First of all, insert your username :"
-      />
-      <TextInput style={styles.textInput} placeholder="username" onChangeText={(text)=>this.username=text}/>
-      <Button title="Validate" style={styles.rootContainer} onPress={()=>{this.sendForm(this.username);this.navigateToBriefingRoom();}}/>
+      <Text style={styles.briefDescription}>Give the IP adress and the numport of the targeted machine :</Text> 
+      <TextInput style={styles.textInput2} placeholder="IP adress" defaultValue="localhost" onChangeText={(text)=>this.IP_address=text}/>
+      <TextInput style={styles.textInput} placeholder="port number" defaultValue="9002" onChangeText={(text)=>this.num_port=text}/>
+
+      <Button title="Validate" style={styles.rootContainer} onPress={()=>{this.sendForm(this.IP_address,this.num_port)}}/>
     </View>
-
     )}
-  
-    navigateToBriefingRoom() {
-      this.navigation.navigate('BriefingRoom');
-    }
-
 }
 
 
@@ -72,7 +65,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  sendForm: (username)=> dispatch(setUserData(username))
+  sendForm: (IP_ad, nump )=> dispatch(setDataConnection(IP_ad,nump))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ConnectionScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(FormAdressContainer);

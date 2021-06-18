@@ -12,6 +12,7 @@ import ScreenBrief from "../components/ScreenBrief";
 import ProviderItem from "../components/ProviderItem";
 import supportedSimulators from "../atoms/SupportedSimulators";
 import ProviderConfigurationsContainer from "../container/ProviderConfigurationsContainer";
+import FormAdressContainer from "../container/FormAdressContainer";
 
 function DataProviderScreen({ navigation, currentDataProvider }) {
 
@@ -52,6 +53,7 @@ function DataProviderScreen({ navigation, currentDataProvider }) {
                     <ProviderItem itemName="GNSS (not yet supported)" simulated={false} currentItem={currentDataProvider === "GNSS"} disableTouch={true} />
                 </View>
             </View>
+            <FormAdressContainer/>
         </View>
     );
 }

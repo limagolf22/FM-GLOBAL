@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import {
     SET_USER_DATA,
+    SET_DATA_CONNECTION,
     SET_SELECTED_MANEUVER,
     RESET_CURRENT_MANEUVER,
     SIGNAL_RPOS_DATA_RECEIVED,
@@ -21,20 +22,15 @@ import maneuvers from '../atoms/ManeuverTypes';
 import dataProviders from '../atoms/DataProviders';
 import dataRefs from "../atoms/XPlaneDataRefs";
 import { DefaultTheme } from '@react-navigation/native';
+import { connect } from 'react-redux';
 
 function connectionData(state={
-    flag_co:-1,
     username:"",
-    IP_adress:"",
-    port_num:""
 }, action) {
     switch (action.type) {
         case SET_USER_DATA:
             return {
-                flag_co:(state.flag_co+1)%10,
-                username:action.username,
-                IP_adress:action.IP_adress,
-                port_num:action.port_num
+                username:action.username
             };
         default:
             return state;
@@ -95,29 +91,34 @@ function maneuver(state = {
 }
 
 function dataProvider(state = {
-    dataProvider: dataProviders.FS, connectionStatus: connectionStatus.NOT_CONNECTED,
-    configurations: { provider: dataProviders.FS, automated_search: false, iP_address: "localhost", port: 9002 },
+    dataProvider: dataProviders.FS,
+    connectionStatus: connectionStatus.NOT_CONNECTED,
+    configurations: { provider: dataProviders.FS, automated_search: false, iP_address: "localhost", port: "9002" },
 },
     action) {
-
     switch (action.type) {
         case SET_DATA_PROVIDER:
-
             if (state.dataProvider === action.dataProvider) {
                 return state;
             } else {
-                return Object.assign({}, dataProvider, {
+                return ({
                     dataProvider: action.dataProvider,
                     connectionStatus: connectionStatus.NOT_CONNECTED,
-                    configurations: state.dataProvider.configurations
+                    configurations: {provider:action.dataProvider, automated_search: false/*state.dataProvider.configurations.automated_search*/, iP_address: state.configurations.iP_address,port: state.configurations.port}
                 });
             }
+        case SET_DATA_CONNECTION:
+            return ({
+                ...state,
+                connectionStatus: connectionStatus.NOT_CONNECTED,
+                configurations: {provider:state.dataProvider, automated_search: state.configurations.automated_search, iP_address: action.iP_address,port: action.port}
+            })
         case CONNECTION_STATUS_CHANGED:
 
-            return Object.assign({}, dataProvider, {
-                dataProvider: state.dataProvider,
-                connectionStatus: action.connectionStatus,
-            });
+            return ({
+                ...state,
+                connectionStatus: action.connectionStatus
+            })
         default:
             return state;
     }

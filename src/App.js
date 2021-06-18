@@ -35,7 +35,7 @@ export default function App() {
   }
   console.log(Platform.OS);
   console.log(store.getState());
-  //store.subscribe(()=>console.log(store.getState()));
+  store.subscribe(()=>console.log(store.getState()));
   /*change to localhost for web tests / 10.0.2.2 for android tests*/
   return (
     <Provider store={store}>
