@@ -60,7 +60,6 @@ export const START_MANEUVER = 'START_MANEUVER';
  */
 export const STOP_MANEUVER = 'STOP_MANEUVER';
 
-
 export const maneuverSelectionStatus = {
     NONE_SELECTED: 'NONE_SELECTED',
 };
@@ -74,9 +73,12 @@ export const COMPLETED_MANEUVER_PERFORMANCE = 'COMPLETED_MANEUVER_PERFORMANCE';
 
 export const REQUEST_TP = 'REQUEST_TP';
 
+export const CLEAR_MEMORY = 'CLEAR_MEMORY';
+
 export function signalManeuverRequirementsMet() {
     return { type: STOP_MANEUVER };
 }
+
 //////////////////////////
 
 /*
@@ -133,4 +135,11 @@ export function sendTPRequest(pl) {
     return { type: REQUEST_TP, payload:pl };
 }
 
+export function completedManeuverPerformance(success,maneuver){
+    return {type:COMPLETED_MANEUVER_PERFORMANCE, success:success, maneuver:maneuver};
+}
+
+export function clearMemory() {
+    return {type:CLEAR_MEMORY};
+}
 

@@ -9,7 +9,8 @@ import {
 import ScreenBrief from '../components/ScreenBrief';
 
 import {connect} from 'react-redux';
-import { setUserData } from '../actions/actions';
+import { setUserData,clearMemory } from '../actions/actions';
+import { store } from '../store/store';
 
 class ConnectionScreen extends React.Component {
 
@@ -17,7 +18,9 @@ class ConnectionScreen extends React.Component {
     super(props);
     this.navigation = props.navigation;
     this.sendForm = props.sendForm;
+    this.clearMemory = props.clearMemory;
     this.username = "";
+
   }
     
   render() {
@@ -30,6 +33,9 @@ class ConnectionScreen extends React.Component {
       />
       <TextInput style={styles.textInput} placeholder="username" onChangeText={(text)=>this.username=text}/>
       <Button title="Validate" style={styles.rootContainer} onPress={()=>{this.sendForm(this.username);this.navigateToBriefingRoom();}}/>
+      <Text> </Text>
+      <Text>If you want to reset all of the user's data :</Text>
+      <Button title="Clear memory" style={styles.rootContainer} onPress={()=>{this.clearMemory();}}/>
     </View>
 
     )}
@@ -72,7 +78,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  sendForm: (username)=> dispatch(setUserData(username))
+  sendForm: (username)=> {dispatch(setUserData(username));console.log(store.getState())},
+  clearMemory: () => dispatch(clearMemory())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ConnectionScreen);

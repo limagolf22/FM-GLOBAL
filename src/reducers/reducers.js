@@ -16,13 +16,15 @@ import {
     MANEUVER_REQUIREMENTS_MET,
     START_MANEUVER,
     STOP_MANEUVER,
-    REQUEST_TP
+    REQUEST_TP,
+    CLEAR_MEMORY
 } from '../actions/actions';
 import maneuvers from '../atoms/ManeuverTypes';
 import dataProviders from '../atoms/DataProviders';
 import dataRefs from "../atoms/XPlaneDataRefs";
 import { DefaultTheme } from '@react-navigation/native';
 import { connect } from 'react-redux';
+import { min } from 'react-native-reanimated';
 
 function createUserPerfList(){
 
@@ -66,11 +68,16 @@ function connectionData(state={
             }
         case COMPLETED_MANEUVER_PERFORMANCE:
             const provi2 = {...state.username_list};
-            const pr2 = action.username;
-            provi2[pr] = state.username_list[pr].map((maneuverPerformance, index) => {
+            
+            const pr2 = state.username;
+            provi2[pr2] = state.username_list[pr2].map((maneuverPerformance, index) => {
                 if (maneuverPerformance.maneuver === action.maneuver) {
+                    var success = 0;
+                    action.success?success=1:success=0;
                     return Object.assign({}, maneuverPerformance, {
                         frequency: maneuverPerformance.frequency + 1,
+                        accuracy:(maneuverPerformance.accuracy*maneuverPerformance.frequency+100*success)/(maneuverPerformance.frequency + 1),
+                        overallTrainingStatus:(maneuverPerformance.frequency+1)*10+(maneuverPerformance.accuracy*maneuverPerformance.frequency+100*success)/(maneuverPerformance.frequency + 1)
                     })
                 }
                 return maneuverPerformance
@@ -80,6 +87,12 @@ function connectionData(state={
                 username_list:provi2
                 
             }
+        case CLEAR_MEMORY:
+            return {
+                ...state,
+                username_list:{}
+            }
+
 
         default:
             return state;

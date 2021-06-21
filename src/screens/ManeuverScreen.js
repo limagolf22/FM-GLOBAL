@@ -17,7 +17,7 @@ import RequirementsContainer from "../container/RequirementsContainer";
 import ConnectionContainer from '../container/ConnectionContainer';
 import { getManeuverRequierements } from "../selectors/RequirementsCalculator";
 import { getManeuverStatus } from "../selectors/ManeuverStatusObserver";
-import { startManeuver, stopManeuver, restartCurrentManeuver,sendTPRequest } from "../actions/actions";
+import { startManeuver, stopManeuver, restartCurrentManeuver,sendTPRequest, completedManeuverPerformance } from "../actions/actions";
 import ManeuverEndStatusContainer from "../container/ManeuverEndStatusContainer";
 import ManeuverEngagementMessage from "../components/ManeuverEngagementMessage";
 import SteepTurnPerformanceContainer from '../container/maneuvers/SteepTurnPerformanceContainer';
@@ -30,7 +30,7 @@ function ManeuverScreen({ maneuverType, allRequirementsFulfilled, userFulfilledE
 
   if (maneuverRecording) {
     if (maneuverStopCriteriaReached) {
-      stopCurrentManeuver(maneuverSuccess);
+      stopCurrentManeuver(maneuverSuccess,maneuverType);
     }
   } else {
     if (userFulfilledEngagementCriteria) {
@@ -149,7 +149,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   startCurrentManeuver: () => dispatch(startManeuver()),
-  stopCurrentManeuver: success => dispatch(stopManeuver(success)),
+  stopCurrentManeuver: (success,maneuver) => {dispatch(stopManeuver(success));dispatch(completedManeuverPerformance(success,maneuver))},
   restartManeuver: () => dispatch(restartCurrentManeuver()),
   sendATPRequest: (pl) => dispatch(sendTPRequest(pl))
 });

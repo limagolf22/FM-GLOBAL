@@ -36,7 +36,8 @@ export default function App() {
     default:
       remAddress = "ws://10.0.2.2:9002";
   }
-  store.subscribe(()=>console.log(store.getState()));
+  console.log(store.getState());
+  //store.subscribe(()=>console.log(store.getState()));
   /*change to localhost for web tests / 10.0.2.2 for android tests*/
   return (
     <Provider store={store}>

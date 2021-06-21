@@ -155,7 +155,7 @@ function getUserPerformance(userPerformances, maneuverTitle) {
 function mapStateToProps(state, ownProps) {
   return {
     userPerformance: getUserPerformance(
-      state.userPerformances,
+      state.connectionData.username_list[state.connectionData.username],
       ownProps.maneuverTitle,
     ),
   };
