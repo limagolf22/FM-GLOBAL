@@ -22,6 +22,8 @@ import { connect } from 'react-redux';
 import ConnectionContainer from '../container/ConnectionContainer';
 import {useKeepAwake} from 'expo-keep-awake';
 
+import GraphAltitude from '../container/GraphAltitude';
+
 function BriefingRoom({ usname, navigation, navigateToManeuver }) {
   useKeepAwake();
   return (
@@ -46,6 +48,7 @@ function BriefingRoom({ usname, navigation, navigateToManeuver }) {
           />
         </TouchableOpacity>
       </View>
+      <GraphAltitude/>
     </View>
   );
 

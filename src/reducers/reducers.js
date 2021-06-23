@@ -76,8 +76,8 @@ function connectionData(state={
                     action.success?success=1:success=0;
                     return Object.assign({}, maneuverPerformance, {
                         frequency: maneuverPerformance.frequency + 1,
-                        accuracy:(maneuverPerformance.accuracy*maneuverPerformance.frequency+100*success)/(maneuverPerformance.frequency + 1),
-                        overallTrainingStatus:(maneuverPerformance.frequency+1)*10+(maneuverPerformance.accuracy*maneuverPerformance.frequency+100*success)/(maneuverPerformance.frequency + 1)
+                        accuracy:parseFloat(((maneuverPerformance.accuracy*maneuverPerformance.frequency+100*success)/(maneuverPerformance.frequency + 1)).toFixed(1)),
+                        overallTrainingStatus:parseFloat((Math.min((maneuverPerformance.frequency+1)*10+(maneuverPerformance.accuracy*maneuverPerformance.frequency+100*success)/(maneuverPerformance.frequency + 1),100)).toFixed(1))
                     })
                 }
                 return maneuverPerformance
@@ -170,6 +170,9 @@ function dataProvider(state = {
                 });
             }
         case SET_DATA_CONNECTION:
+            if (state.configurations.iP_address===action.iP_address && state.configurations.port===action.port) {
+                return state
+            }
             return ({
                 ...state,
                 connectionStatus: connectionStatus.NOT_CONNECTED,
@@ -205,19 +208,24 @@ function dataSender(
 }
 
 function flightData(
-    state = { heading: 0, elevASL: 0, elevAGL: 0, roll: 0, engineRPM: 0, indicatedAirspeed: 0 },
+    state = { heading: 0, elevASL: 0, elevAGL: 0, roll: 0, engineRPM: 0, indicatedAirspeed: 0, record_altitude:[] },
     action,
 ) {
 
     switch (action.type) {
         case SIGNAL_RPOS_DATA_RECEIVED:
-
+            var pro_l=state.record_altitude;
+            if (pro_l.length>=100){
+                pro_l.shift();
+            }
+            pro_l.push(action.elevASL);
             return {
                 ...state,
                 heading: action.heading,
                 elevASL: action.elevASL,
                 elevAGL: action.elevAGL,
                 roll: action.roll,
+                record_altitude:pro_l
             }
             return Object.assign({}, flightData, {
                 heading: action.heading,
