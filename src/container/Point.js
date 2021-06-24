@@ -11,6 +11,6 @@ export default function Point({posX,posY}){
         position:'absolute',
         borderRadius:2,
         backgroundColor:'red',
-        transform:[{translateX:posX},{translateY:(5000-posY)*300/5000-2}]}}/>
+        transform:[{translateX:posX},{translateY:posY}]}}/>
     )
 }

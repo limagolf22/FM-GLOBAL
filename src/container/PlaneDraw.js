@@ -36,7 +36,7 @@ const styles = {
 export default function PlaneDraw({posX,posY}){
     return(
         
-            <View style={{...(styles.fuselage),transform: [{ scaleX: 5 },{ translateX: posX/5 },{translateY: (5000-posY)*300/5000-10/2}]}}>
+            <View style={{...(styles.fuselage),transform: [{ scaleX: 5 },{ translateX: posX/5 },{translateY: posY-4}]}}>
                    <View style={{...(styles.rudder),transform: [{ scaleY: 8 },{ translateX: 0/5 },{translateY: -3/8}]}}></View> 
                    <View style={{...(styles.wing),transform: [{ scaleX: 1 },{ translateX: 13/5 },{translateY: 3}]}}></View> 
             </View>

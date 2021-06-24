@@ -208,7 +208,7 @@ function dataSender(
 }
 
 function flightData(
-    state = { heading: 0, elevASL: 0, elevAGL: 0, roll: 0, engineRPM: 0, indicatedAirspeed: 0, record_altitude:[], flagfd:-1 },
+    state = { heading: 0, elevASL: 0, elevAGL: 0, roll: 0, engineRPM: 0, indicatedAirspeed: 0, record_altitude:[], record_speed:[], flagrpos:-1, flagrref:-1 },
     action,
 ) {
 
@@ -218,11 +218,11 @@ function flightData(
             if (pro_l.length>=100){
                 pro_l=[];
             }
-            var provi = (state.flagfd+1)%10;
-            pro_l.push({key:pro_l.length, alt:action.elevASL});
+            let provi = (state.flagrpos+1)%10;
+            pro_l.push({key:pro_l.length, value:action.elevASL});
             return {
                 ...state,
-                flagfd:provi,
+                flagrpos:provi,
                 heading: action.heading,
                 elevASL: action.elevASL,
                 elevAGL: action.elevAGL,
@@ -241,9 +241,18 @@ function flightData(
                         engineRPM: action.value,
                     }
                 case dataRefs.INDICATED_AIRSPEED:
+                    var pro_l2=state.record_speed;
+                    if (pro_l2.length>=100){
+                        pro_l2=[];
+                    }
+                    let provi2 = (state.flagrref+1)%10;
+                    pro_l2.push({key:pro_l2.length, value:action.value});
                     return {
                         ...state,
+
+                        flagrref:provi2,
                         indicatedAirspeed: action.value,
+                        record_speed: pro_l2
                     }
             }
 

@@ -23,6 +23,7 @@ import ConnectionContainer from '../container/ConnectionContainer';
 import {useKeepAwake} from 'expo-keep-awake';
 
 import GraphAltitude from '../container/GraphAltitude';
+import GraphSpeed from '../container/GraphSpeed';
 
 function BriefingRoom({ usname, navigation, navigateToManeuver }) {
   useKeepAwake();
@@ -48,7 +49,8 @@ function BriefingRoom({ usname, navigation, navigateToManeuver }) {
           />
         </TouchableOpacity>
       </View>
-      <GraphAltitude/>
+      <GraphAltitude _min={2500} _max={5000} />
+    
     </View>
   );
 

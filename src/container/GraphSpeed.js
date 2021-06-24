@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import GraphContainer from './GraphContainer';
 
 const mapStateToProps = state => ({
-    val_list:state.flightData.record_altitude,
-    flag:state.flightData.flagrpos
+    val_list:state.flightData.record_speed,
+    flag:state.flightData.flagrref
   });
 
 const mapDispatchToProps = dispatch => ({

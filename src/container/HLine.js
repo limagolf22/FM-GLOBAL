@@ -6,18 +6,17 @@ import {
   Text
 } from 'react-native';
 
-export default function HLine({posY}){
+export default function HLine({posY, min, max, width, height}){
 
     return (
         <View>
-            <View style={{ ...hline,transform:[{translateY:posY}]}}/>
-            <Text style={{fontSize:10, position:'absolute',transform:[{translateY:posY}]}}>{5000-posY*5000/300}</Text>
+            <View style={{ ...hline,width:width-2,transform:[{translateY:posY}]}}/>
+            <Text style={{fontSize:10, position:'absolute',transform:[{translateY:posY}]}}>{(max-posY*(max-min)/height).toFixed(1)}</Text>
         </View>
     )
 }
 
 const hline={
-    width:398,
     height:1,
     position:'absolute',
     backgroundColor:'black',
