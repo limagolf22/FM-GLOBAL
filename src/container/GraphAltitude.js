@@ -7,28 +7,28 @@ import {
 
 import { connect } from 'react-redux';
 
-function GraphAltitude({alti_t,alti_list}){
-    var provi =[]
-    let i;
-    for (i=0;i<alti_list.length;i++) {
-        provi.push(<View style={{width:4,
-            height:4,
-            position:'absolute',
-            borderRadius:2,
-            backgroundColor:'red',
-            transform:[{translateX:4*i},{translateY:(5000-alti_list[i])*300/5000}]}}/>)
-    }
+import Point from './Point';
+import HLine from './HLine';
+import PlaneDraw from './PlaneDraw';
+
+const HGrid =[];
+let i=1
+for (i=0;i<10;i++) {
+  HGrid.push(<HLine posY={i*300/10} />)
+}
+
+function GraphAltitude({alti_t,alti_list,flag}){
+    let p=flag;
     return (
         <View style={styles.graphContainer}>
-
-        {provi}
-
+        {HGrid}
+        <PlaneDraw posX={alti_list.length>0?alti_list[alti_list.length-1].key*4:alti_t} posY={alti_list.length>0?alti_list[alti_list.length-1].alt:alti_t}/>
+        {alti_list.map(val=>(<Point posX={val.key*4} posY={val.alt} key={val.key.toString()} />))}
         </View>
 
     )
 
 }
-
 
 const styles = StyleSheet.create({
     graphContainer: {
@@ -36,18 +36,12 @@ const styles = StyleSheet.create({
       height:300,
       width:400
     },
-    point: {
-      width:40,
-      height:40,
-      position:'relative',
-      borderRadius:2,
-      backgroundColor:'red'
-    },
   });
 
 const mapStateToProps = state => ({
     alti_t: state.flightData.elevASL,
-    alti_list:state.flightData.record_altitude
+    alti_list:state.flightData.record_altitude,
+    flag:state.flightData.flagfd
   });
 
 const mapDispatchToProps = dispatch => ({
