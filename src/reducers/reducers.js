@@ -17,7 +17,8 @@ import {
     START_MANEUVER,
     STOP_MANEUVER,
     REQUEST_TP,
-    CLEAR_MEMORY
+    CLEAR_MEMORY,
+    SIGNAL_WS_DATA_RECEIVED
 } from '../actions/actions';
 import maneuvers from '../atoms/ManeuverTypes';
 import dataProviders from '../atoms/DataProviders';
@@ -155,7 +156,7 @@ function maneuver(state = {
 function dataProvider(state = {
     dataProvider: dataProviders.FS,
     connectionStatus: connectionStatus.NOT_CONNECTED,
-    configurations: { provider: dataProviders.FS, automated_search: false, iP_address: "10.0.2.2", port: "9002" },
+    configurations: { provider: dataProviders.FS, automated_search: false, iP_address: "10.0.2.2", port: "9002", frequency:10 },
 },
     action) {
     switch (action.type) {
@@ -166,7 +167,7 @@ function dataProvider(state = {
                 return ({
                     dataProvider: action.dataProvider,
                     connectionStatus: connectionStatus.NOT_CONNECTED,
-                    configurations: {provider:action.dataProvider, automated_search: false/*state.dataProvider.configurations.automated_search*/, iP_address: state.configurations.iP_address,port: state.configurations.port}
+                    configurations: {provider:action.dataProvider, automated_search: false/*state.dataProvider.configurations.automated_search*/, iP_address: state.configurations.iP_address,port: state.configurations.port, frequency:state.configurations.frequency}
                 });
             }
         case SET_DATA_CONNECTION:
@@ -176,13 +177,18 @@ function dataProvider(state = {
             return ({
                 ...state,
                 connectionStatus: connectionStatus.NOT_CONNECTED,
-                configurations: {provider:state.dataProvider, automated_search: state.configurations.automated_search, iP_address: action.iP_address,port: action.port}
+                configurations: {provider:state.dataProvider, automated_search: state.configurations.automated_search, iP_address: action.iP_address,port: action.port, frequency:state.configurations.frequency}
             })
         case CONNECTION_STATUS_CHANGED:
 
             return ({
                 ...state,
                 connectionStatus: action.connectionStatus
+            })
+        case SIGNAL_WS_DATA_RECEIVED:
+            return ({
+                ...state,
+                configurations:{...state.configurations,frequency:action.frequency}
             })
         default:
             return state;
@@ -215,11 +221,12 @@ function flightData(
     switch (action.type) {
         case SIGNAL_RPOS_DATA_RECEIVED:
             var pro_l=state.record_altitude;
-            if (pro_l.length>=200){
-                pro_l=[];
+            if (pro_l.length>=100){
+                //pro_l=[];
+                pro_l.shift();
             }
             let provi = (state.flagrpos+1)%10;
-            pro_l.push({key:pro_l.length, value:action.elevASL});
+            pro_l.push(action.elevASL);
             return {
                 ...state,
                 flagrpos:provi,
@@ -242,11 +249,13 @@ function flightData(
                     }
                 case dataRefs.INDICATED_AIRSPEED:
                     var pro_l2=state.record_speed;
-                    if (pro_l2.length>=200){
-                        pro_l2=[];
+                    if (pro_l2.length>=100){
+                       // pro_l2=[];
+                        pro_l2.shift();
+
                     }
                     let provi2 = (state.flagrref+1)%10;
-                    pro_l2.push({key:pro_l2.length, value:action.value});
+                    pro_l2.push(action.value);
                     return {
                         ...state,
 

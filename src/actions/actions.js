@@ -31,6 +31,11 @@ export const RESET_CURRENT_MANEUVER = 'RESET_CURRENT_MANEUVER';
 export const RESTART_CURRENT_MANEUVER = 'RESTART_CURRENT_MANEUVER';
 
 /**
+ * FS sent a dataframe with WS data (frequency of emissions)
+ */
+ export const SIGNAL_WS_DATA_RECEIVED = 'SIGNAL_WS_DATA_RECEIVED';
+
+/**
  * X-Plane sent a dataframe with RPOS data (heading, elevation, roll)
  */
 export const SIGNAL_RPOS_DATA_RECEIVED = 'SIGNAL_RPOS_DATA_RECEIVED';
@@ -129,6 +134,10 @@ export function singalDataRefReceived(dataref, value) {
 
 export function signalRPOSDataReceived(heading, elevASL, elevAGL, roll) {
     return { type: SIGNAL_RPOS_DATA_RECEIVED, heading, elevASL, elevAGL, roll };
+}
+
+export function signalWSDataReceived(frequency) {
+    return { type: SIGNAL_WS_DATA_RECEIVED, frequency:frequency };
 }
 
 export function sendTPRequest(pl) {

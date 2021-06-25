@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { signalRPOSDataReceived, singalDataRefReceived, connectionStatusChanged, connectionStatus } from "../actions/actions";
+import { signalWSDataReceived, signalRPOSDataReceived, singalDataRefReceived, connectionStatusChanged, connectionStatus } from "../actions/actions";
 import dataProviders from '../atoms/DataProviders';
 
 import datarefs from "../atoms/XPlaneDataRefs";
@@ -61,6 +61,9 @@ class FSConnector extends React.Component {
                 this.store.dispatch(singalDataRefReceived(datarefs.INDICATED_AIRSPEED, speed));
                 this.store.dispatch(singalDataRefReceived(datarefs.ENGINE_RPM, rpm));
                 break;
+            case 2:
+                let WSfreq = parseInt(values[1]);
+                this.store.dispatch(signalWSDataReceived(WSfreq));
             default:
               //  console.log("default");
         }
