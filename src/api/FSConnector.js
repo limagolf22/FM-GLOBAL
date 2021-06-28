@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { signalWSDataReceived, signalRPOSDataReceived, singalDataRefReceived, connectionStatusChanged, connectionStatus } from "../actions/actions";
+import { signalWSDataReceived, signalRPOSDataReceived, singalDataRefReceived, connectionStatusChanged, connectionStatus, signalPOSReceived } from "../actions/actions";
 import dataProviders from '../atoms/DataProviders';
 
 import datarefs from "../atoms/XPlaneDataRefs";
@@ -64,6 +64,10 @@ class FSConnector extends React.Component {
             case 2:
                 let WSfreq = parseInt(values[1]);
                 this.store.dispatch(signalWSDataReceived(WSfreq));
+            case 3:
+                let latitude = parseFloat(values[1]);
+                let longitude = parseFloat(values[2]);
+                this.store.dispatch(signalPOSReceived(latitude,longitude));
             default:
               //  console.log("default");
         }

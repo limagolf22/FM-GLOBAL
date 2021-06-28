@@ -24,6 +24,7 @@ import {useKeepAwake} from 'expo-keep-awake';
 
 import GraphAltitude from '../container/GraphAltitude';
 import GraphSpeed from '../container/GraphSpeed';
+import GraphHorizontal from '../container/GraphHorizontal';
 
 function BriefingRoom({ usname, navigation, navigateToManeuver }) {
   useKeepAwake();
@@ -49,8 +50,9 @@ function BriefingRoom({ usname, navigation, navigateToManeuver }) {
           />
         </TouchableOpacity>
       </View>
-      <GraphAltitude _min={2500} _max={5000} Vsubdiv={200} Hsubdiv={10} autosize={true} resolution={100} />
-     { <GraphSpeed _min={10} _max={250} Vsubdiv={200} Hsubdiv={10} autosize={true} resolution={10} Isplane={false}/>}
+      {<GraphHorizontal Pmax={100}/>}
+     {/* <GraphAltitude _min={2500} _max={5000} Vsubdiv={200} Hsubdiv={10} autosize={true} resolution={100} /> */}
+     { /*<GraphSpeed _min={10} _max={250} Vsubdiv={200} Hsubdiv={10} autosize={true} resolution={10} Isplane={false}/> */}
     </View>
   );
 

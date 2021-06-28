@@ -18,7 +18,8 @@ import {
     STOP_MANEUVER,
     REQUEST_TP,
     CLEAR_MEMORY,
-    SIGNAL_WS_DATA_RECEIVED
+    SIGNAL_WS_DATA_RECEIVED,
+    SIGNAL_POS_RECEIVED
 } from '../actions/actions';
 import maneuvers from '../atoms/ManeuverTypes';
 import dataProviders from '../atoms/DataProviders';
@@ -214,19 +215,25 @@ function dataSender(
 }
 
 function flightData(
-    state = { heading: 0.0, elevASL: 0.0, elevAGL: 0.0, roll: 0.0, engineRPM: 0.0, indicatedAirspeed: 0.0, record_altitude:[], record_speed:[], flagrpos:-1, flagrref:-1 },
+    state = { heading: 0.0, elevASL: 0.0, elevAGL: 0.0, roll: 0.0, engineRPM: 0.0, indicatedAirspeed: 0.0, record_altitude:[], record_speed:[], record_ground:[], flagrpos:-1, flagrref:-1,latitude:0.0,longitude:0.0,record_latitude:[], record_longitude:[], flagpos:-1},
     action,
 ) {
 
     switch (action.type) {
         case SIGNAL_RPOS_DATA_RECEIVED:
-            var pro_l=state.record_altitude;
+            
+            let pro_l=state.record_altitude;
+            let pro_lb=state.record_ground;
             if (pro_l.length>=100){
                 //pro_l=[];
                 pro_l.shift();
             }
+            if (pro_lb.length>=110){
+                pro_lb.shift();
+            }
             let provi = (state.flagrpos+1)%10;
             pro_l.push(action.elevASL);
+            pro_lb.push(action.elevASL-action.elevAGL)
             return {
                 ...state,
                 flagrpos:provi,
@@ -234,7 +241,8 @@ function flightData(
                 elevASL: action.elevASL,
                 elevAGL: action.elevAGL,
                 roll: action.roll,
-                record_altitude:pro_l
+                record_altitude:pro_l,
+                record_ground:pro_lb
             }
             return Object.assign({}, flightData, {
                 heading: action.heading,
@@ -264,7 +272,25 @@ function flightData(
                         record_speed: pro_l2
                     }
             }
-
+        case SIGNAL_POS_RECEIVED:
+            let pro_lat=state.record_latitude;
+            let pro_lon=state.record_longitude;
+            if (pro_lat.length>=100){
+                //pro_l=[];
+                pro_lat.shift();
+                pro_lon.shift();
+            }
+            let provi3 = (state.flagpos+1)%10;
+            pro_lat.push(action.latitude);
+            pro_lon.push(action.longitude);
+            return {
+                ...state,
+                flagpos:provi3,
+                latitude:action.latitude,
+                longitude:action.longitude,
+                record_latitude:pro_lat,
+                record_longitude:pro_lon
+            }
         default:
             return state;
     }

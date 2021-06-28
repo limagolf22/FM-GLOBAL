@@ -46,6 +46,10 @@ export const SIGNAL_RPOS_DATA_RECEIVED = 'SIGNAL_RPOS_DATA_RECEIVED';
 export const SIGNAL_DATAREF_RECEIVED = 'SIGNAL_DATAREF_RECEIVED';
 
 /**
+ * FS2020 sent a dataframe with POS data (e.g. latitude, longitude)
+ */
+export const SIGNAL_POS_RECEIVED = 'SIGNAL_POS_RECEIVED';
+/**
  * The user selected a data provider (e.g. X-Plane)
  */
 export const SET_DATA_PROVIDER = 'SET_DATA_PROVIDER';
@@ -152,3 +156,6 @@ export function clearMemory() {
     return {type:CLEAR_MEMORY};
 }
 
+export function signalPOSReceived(latitude,longitude){
+    return {type:SIGNAL_POS_RECEIVED, latitude:latitude, longitude:longitude};
+}
