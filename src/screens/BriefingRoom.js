@@ -50,7 +50,7 @@ function BriefingRoom({ usname, navigation, navigateToManeuver }) {
           />
         </TouchableOpacity>
       </View>
-      {<GraphHorizontal Pmax={100}/>}
+      {<GraphHorizontal Pmax={400}/>}
      {/* <GraphAltitude _min={2500} _max={5000} Vsubdiv={200} Hsubdiv={10} autosize={true} resolution={100} /> */}
      { /*<GraphSpeed _min={10} _max={250} Vsubdiv={200} Hsubdiv={10} autosize={true} resolution={10} Isplane={false}/> */}
     </View>

@@ -37,7 +37,7 @@ const styles = {
 
 export default function PlaneDrawH({posX,posY,heading}){
     return(
-            <View style={{...(styles.canvas),transform:[{ translateX: posX },{translateY: posY-4},{rotateZ:(heading-90)+"deg"}]}}>
+            <View style={{...(styles.canvas),transform:[{ translateX: posX-3 },{translateY: posY-4},{rotateZ:(heading-90)+"deg"}]}}>
             <View style={{...(styles.fuselage),transform: [{ scaleX: 5 }]}}>
                     <View style={{...(styles.rudder),transform: [{ scaleY: 10 },{ translateX: 0/5 },{translateY: 1/8}]}}></View> 
                    <View style={{...(styles.wing),transform: [{ scaleX: 1/5 },{ scaleY: 5 },{ translateX: 7 }]}}></View> 

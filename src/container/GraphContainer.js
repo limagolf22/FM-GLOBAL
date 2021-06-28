@@ -75,7 +75,7 @@ class GraphContainer extends React.Component {
       return (
           <View style={{borderWidth:2,height:this.props.height+5,width:this.props.width}}>
           {/*[ ...Array(this.props.Hsubdiv).keys() ].map((j) => <HLine width={this.props.width} posY={j*this.props.height/this.props.Hsubdiv} max={max} min={min} height={this.props.height} key={j.toString()} />)*/}
-          {[ ...Array(Math.ceil(delta/this.resolution)).keys() ].map((j) => <HLine width={this.props.width} posY={this.props.height+min/ratio-clamp(min+(j+1)*this.resolution-offset,min-offset+this.resolution,max-max%this.resolution)/ratio} max={max} min={min} height={this.props.height} key={j.toString()} />)}
+          {[ ...Array(Math.ceil(delta/this.resolution)).keys() ].map((j) => <HLine width={this.props.width} posY={this.props.height+min/ratio-clamp(min+(j+1)*this.resolution-offset,min-offset+this.resolution,max-max%this.resolution)/ratio} max={max} min={min} height={this.props.height} val={min+(j+1)*this.resolution-offset} key={j.toString()} />)}
           {this.props.Isplane?<PlaneDraw posX={n_own>0?(this.ownValList)[n_own-1].key*this.props.width/Vsubdiv:0} posY={n_own>0?this.props.height+min/ratio-clamp((this.ownValList)[n_own-1].value,min,max)/ratio:0}/>:null}
           {[...Array(n_own).keys() ].map((val)=>(<Point posX={val*this.props.width/Vsubdiv} posY={this.props.height+min/ratio-clamp(this.ownValList[val].value,min,max)/ratio} key={val.toString()} />))}
           {[...Array(n2).keys() ].map((val)=>(<Point posX={val*this.props.width/Vsubdiv} posY={this.props.height+min/ratio-clamp(this.props.val_list2[val],min,max)/ratio} key={val.toString()} color={'brown'} />))}
