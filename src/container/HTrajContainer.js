@@ -3,6 +3,8 @@ import {
   View,
   StyleSheet,
   TouchableOpacity,
+  Button,
+  Text
 } from 'react-native';
 
 import Point from './Point';
@@ -16,7 +18,7 @@ function clamp(val, min, max) {
   return val > max ? max : val < min ? min : val;
 }
 
-export default class HTrajContainer extends React.Component {
+class HTrajContainer extends React.Component {
     constructor(props){
       super(props);
       this.XMax=props.x_max;
@@ -55,7 +57,7 @@ export default class HTrajContainer extends React.Component {
       
     
       if (this.props.autosize){
-        if (n_own%Math.max(this.props.Pmax/20,1)==0 && n_own>Math.max(this.props.Pmax/5,2) && n_own!=0){
+        if (n_own%Math.round(this.props.WSfreq/this.props.refreshRateScale)==0 && n_own>Math.max(10,2)){
           let pr_maxX=Math.max(...this.ownValList.map(val=>(val.valueX)));        
           let pr_minX=Math.min(...this.ownValList.map(val=>(val.valueX)));
           let pr_maxY=Math.max(...this.ownValList.map(val=>(val.valueY)));        
@@ -63,20 +65,13 @@ export default class HTrajContainer extends React.Component {
           this.XMax=pr_maxX+Math.max((pr_maxX-pr_minX),this.props.resolutionX/2);
           this.XMin=pr_minX-Math.max((pr_maxX-pr_minX),this.props.resolutionX/2);
           this.YMax=pr_maxY+Math.max((pr_maxY-pr_minY),this.props.resolutionY/2);
-          this.YMin=pr_minY-Math.max((pr_maxY-pr_minY),this.props.resolutionY/2);
-          
+          this.YMin=pr_minY-Math.max((pr_maxY-pr_minY),this.props.resolutionY/2);          
         }
-        minX = this.XMin;
-        maxX = this.XMax;
-        minY = this.YMin;
-        maxY = this.YMax;
       }
-      else {
-        minX = this.props.x_min;
-        maxX = this.props.x_max;
-        minY = this.props.y_min;
-        maxY = this.props.y_max;        
-      }
+      minX = this.XMin;
+      maxX = this.XMax;
+      minY = this.YMin;
+      maxY = this.YMax;
       let deltaX = maxX-minX;
       let deltaY = maxY-minY;
       let ratioX = deltaX/this.props.width;
@@ -96,23 +91,56 @@ export default class HTrajContainer extends React.Component {
       let offsetX = (minX)%(this.resolutionX);
       let offsetY =(minY)%(this.resolutionY);
       return (
-          <View style={{borderWidth:2,height:this.props.height+5,width:this.props.width+4}}>
-          {/*[ ...Array(this.props.Hsubdiv).keys() ].map((j) => <HLine width={this.props.width} posY={j*this.props.height/this.props.Hsubdiv} max={max} min={min} height={this.props.height} key={j.toString()} />)*/}
-          {[ ...Array(Math.ceil(deltaY/this.resolutionY)).keys() ].map((j) => <HLine width={this.props.width} posY={this.props.height+minY/ratioY-(minY-offsetY+(j)*this.resolutionY)/ratioY} max={maxY} min={minY} height={this.props.height} val={minY-offsetY+(j)*this.resolutionY} key={j.toString()} />)}
-          {[ ...Array(Math.ceil(deltaX/this.resolutionX)).keys() ].map((j) => <VLine width={this.props.width} posX={-minX/ratioX+(minX-offsetX+(j)*this.resolutionX)/ratioX} max={maxX} min={minX} height={this.props.height} val={minX-offsetX+(j)*this.resolutionX} key={j.toString()} />)}
-          {this.props.Isplane?<PlaneDrawH posX={n_own>0?-minX/ratioX+clamp(this.ownValList[n_own-1].valueX,minX,maxX)/ratioX:0} posY={n_own>0?this.props.height+minY/ratioY-clamp((this.ownValList)[n_own-1].valueY,minY,maxY)/ratioY:0} heading={this.props.heading}/>:null}
-          {[...Array(n_own).keys() ].map((val)=>(<Point posX={-minX/ratioX+clamp(this.ownValList[val].valueX,minX,maxX)/ratioX} posY={this.props.height+minY/ratioY-clamp(this.ownValList[val].valueY,minY,maxY)/ratioY} key={val.toString()} />))}
-          {[...Array(10).keys() ].map((k)=>(<Point posX={n_own>10?-minX/ratioX+clamp(this.ownValList[n_own-1].valueX+k*10/8*(this.ownValList[n_own-1].valueX-this.ownValList[n_own-8].valueX),minX,maxX)/ratioX:0} posY={n_own>10?this.props.height+minY/ratioY-clamp(this.ownValList[n_own-1].valueY+k*10/8*(this.ownValList[n_own-1].valueY-this.ownValList[n_own-8].valueY),minY,maxY)/ratioY:0} key={k.toString()} color={'green'} />))}
-
+          <View>
+           
+            <View style={{borderWidth:2,height:this.props.height+5,width:this.props.width+4}}>
+            {[ ...Array(Math.ceil(deltaY/this.resolutionY)).keys() ].map((j) => <HLine width={this.props.width} posY={this.props.height+minY/ratioY-(minY-offsetY+(j)*this.resolutionY)/ratioY} max={maxY} min={minY} height={this.props.height} val={minY-offsetY+(j)*this.resolutionY} key={j.toString()} />)}
+            {[ ...Array(Math.ceil(deltaX/this.resolutionX)).keys() ].map((j) => <VLine width={this.props.width} posX={-minX/ratioX+(minX-offsetX+(j)*this.resolutionX)/ratioX} max={maxX} min={minX} height={this.props.height} val={minX-offsetX+(j)*this.resolutionX} key={j.toString()} />)}
+            {this.props.Isplane?<PlaneDrawH posX={n_own>0?-minX/ratioX+clamp(this.ownValList[n_own-1].valueX,minX,maxX)/ratioX:0} posY={n_own>0?this.props.height+minY/ratioY-clamp((this.ownValList)[n_own-1].valueY,minY,maxY)/ratioY:0} heading={this.props.heading}/>:null}
+            {[...Array(n_own).keys() ].map((val)=>(<Point posX={-minX/ratioX+clamp(this.ownValList[val].valueX,minX,maxX)/ratioX} posY={this.props.height+minY/ratioY-clamp(this.ownValList[val].valueY,minY,maxY)/ratioY} key={val.toString()} />))}
+            {[...Array(10).keys() ].map((k)=>(<Point posX={n_own>10?-minX/ratioX+clamp(this.ownValList[n_own-1].valueX+k*10/8*(this.ownValList[n_own-1].valueX-this.ownValList[n_own-8].valueX),minX,maxX)/ratioX:0} posY={n_own>10?this.props.height+minY/ratioY-clamp(this.ownValList[n_own-1].valueY+k*10/8*(this.ownValList[n_own-1].valueY-this.ownValList[n_own-8].valueY),minY,maxY)/ratioY:0} key={k.toString()} color={'green'} />))}
+            </View>
+            <View style={{flexDirection:'row',alignItems:'center'}}>
+              <TouchableOpacity style={{width:this.props.width/2-2,backgroundColor:'deepskyblue',alignItems:'center',margin:2}} onPress={()=>this.ZoomOut()} title="-">
+                <Text>{"-"}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={{width:this.props.width/2-2,backgroundColor:'deepskyblue',alignItems:'center',margin:2}} onPress={()=>this.ZoomIn()} title="+">
+                <Text>{"+"}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
       )
     }
+
+    ZoomOut(){ // give -5% of zoom 
+      var dX;
+      var dY;
+      dX=(this.XMax-this.XMin);
+      dY=(this.YMax-this.YMin);
+      this.XMax+=dX*0.05;
+      this.XMin-=dX*0.05;
+      this.YMax+=dY*0.05;
+      this.YMin-=dY*0.05;
+      this.setState({});
+    }
+    ZoomIn(){ // give +5% of zoom 
+      var dX;
+      var dY;
+      dX=(this.XMax-this.XMin);
+      dY=(this.YMax-this.YMin);
+      this.XMax-=dX*0.05;
+      this.XMin+=dX*0.05;
+      this.YMax-=dY*0.05;
+      this.YMin+=dY*0.05;
+      this.setState({});
+    }
 }
+
 
 HTrajContainer.defaultProps = {
   width:400,
   height:400,
-  autosize:true,
+  autosize:false,
   x_min:-10,
   x_max:10,
   y_min:-10,
@@ -122,5 +150,16 @@ HTrajContainer.defaultProps = {
   reinit: false,
   resolutionX:1,
   resolutionY:1,
-  heading:0.0
+  heading:0.0,
+  refreshRateScale:2.0
 };
+
+const mapStateToProps = state => ({
+  WSfreq: state.dataProvider.configurations.frequency
+});
+
+const mapDispatchToProps = dispatch => ({
+ 
+});
+
+export default connect(mapStateToProps,mapDispatchToProps)(HTrajContainer);
