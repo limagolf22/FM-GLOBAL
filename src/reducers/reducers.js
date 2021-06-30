@@ -157,7 +157,7 @@ function maneuver(state = {
 function dataProvider(state = {
     dataProvider: dataProviders.FS,
     connectionStatus: connectionStatus.NOT_CONNECTED,
-    configurations: { provider: dataProviders.FS, automated_search: false, iP_address: "10.0.2.2", port: "9002", frequency:10 },
+    configurations: { provider: dataProviders.FS, automated_search: false, iP_address: "localhost", port: "9002", frequency:5 },
 },
     action) {
     switch (action.type) {
@@ -228,7 +228,7 @@ function flightData(
                 //pro_l=[];
                 pro_l.shift();
             }
-            if (pro_lb.length>=110){
+            if (pro_lb.length>=100){
                 pro_lb.shift();
             }
             let provi = (state.flagrpos+1)%10;

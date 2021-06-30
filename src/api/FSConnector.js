@@ -64,12 +64,14 @@ class FSConnector extends React.Component {
             case 2:
                 let WSfreq = parseInt(values[1]);
                 this.store.dispatch(signalWSDataReceived(WSfreq));
+                break;
             case 3:
                 let latitude = parseFloat(values[1]);
                 let longitude = parseFloat(values[2]);
                 this.store.dispatch(signalPOSReceived(latitude,longitude));
+                break;
             default:
-              //  console.log("default");
+                console.log("default");
         }
         
     }

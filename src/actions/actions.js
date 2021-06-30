@@ -141,6 +141,7 @@ export function signalRPOSDataReceived(heading, elevASL, elevAGL, roll) {
 }
 
 export function signalWSDataReceived(frequency) {
+    console.log("freq received :"+frequency);
     return { type: SIGNAL_WS_DATA_RECEIVED, frequency:frequency };
 }
 
